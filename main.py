@@ -1,9 +1,9 @@
 import os
 import re
-from PIL import Image
-import pytesseract
 import pandas as pd
-import time
+import pytesseract
+from PIL import Image
+from tqdm import tqdm
 from config import *
 
 # Caminho do executável do Tesseract
@@ -16,8 +16,12 @@ def extract_text_from_images(image_folder, output_excel):
     # Lista para armazenar os dados
     data = []
     print('Iniciando processamento de imagens!')
+    image_files = [
+        file_name for file_name in os.listdir(image_folder)
+        if file_name.lower().endswith(('.jpeg', '.jpg', '.png'))
+    ]
     # Percorre todos os arquivos na pasta de imagens
-    for file_name in os.listdir(image_folder):
+    for file_name in tqdm(image_files, desc="Processando imagens", unit="imagem"):
         if file_name.lower().endswith(('.jpeg', '.jpg', '.png')):  # Filtra arquivos de imagem
             file_path = os.path.join(image_folder, file_name)
             
@@ -66,8 +70,8 @@ def extract_text_from_images(image_folder, output_excel):
     print(f"Processamento concluído com sucesso! Dados salvos em {output_excel}")
 
 # Configurações
-image_folder = './data'  # Substitua pelo caminho da sua pasta
-output_excel = 'resultados.xlsx'  # Nome do arquivo de saída
+image_folder = input(r'Insira o caminho da pasta que contem as imagens: ')  # Substitua pelo caminho da sua pasta
+output_excel = '85-pontos.xlsx'  # Nome do arquivo de saída
 
 # Executa o script
 extract_text_from_images(image_folder, output_excel)
